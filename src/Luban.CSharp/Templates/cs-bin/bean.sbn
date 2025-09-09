@@ -70,6 +70,13 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
 {
     public {{__name}}(ByteBuf _buf) {{if parent_def_type}} : base(_buf) {{end}}
     {
+        {{~if __export_tags~}}
+        if(_buf.ReadBool()){ 
+            __tag__ = _buf.ReadString(); 
+        } else { 
+            __tag__ = null; 
+        }
+        {{~end~}}
         {{~ for field in export_fields
             fieldName = format_property_name __code_style field.name
          ~}}
@@ -101,6 +108,12 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
     {{~end~}}
     }
 
+    {{~if __export_tags~}}
+    /// <summary>
+    /// 标签
+    /// </summary>
+    public readonly string __tag__;
+    {{~end~}}
     {{~ for field in export_fields ~}}
 {{~if field.comment != '' ~}}
     /// <summary>
@@ -144,6 +157,9 @@ public {{class_modifier __bean}} partial class {{__name}} : {{if parent_def_type
     {{~for field in hierarchy_export_fields ~}}
         + "{{format_field_name __code_style field.name}}:" + {{to_pretty_string (format_property_name __code_style field.name) field.ctype}} + ","
     {{~end~}}
+        {{~if __export_tags~}}
+        + "__tag__:" + __tag__ + ","
+        {{~end~}}
         + "}";
     }
 }

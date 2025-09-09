@@ -14,6 +14,8 @@ public class DBean : DType
     public DefBean ImplType { get; }
 
     public List<DType> Fields { get; }
+    
+    public List<string> Tags { get; set; }
 
     public override string TypeName => "bean";
 

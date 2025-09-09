@@ -9,6 +9,11 @@ namespace Luban.Lua.DataTarget;
 [DataTarget("lua")]
 public class LuaDataTarget : DataTargetBase
 {
+    public LuaDataTarget()
+    {
+        ToLuaLiteralVisitor.ExportTags = EnvManager.Current.GetBoolOptionOrDefault("lua", "exportTags", true, false);
+    }
+
     public void ExportTableSingleton(DefTable t, Record record, StringBuilder result)
     {
         result.Append("return ").AppendLine();

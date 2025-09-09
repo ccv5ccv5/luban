@@ -9,6 +9,11 @@ public class BinaryDataTarget : DataTargetBase
 {
     protected override string DefaultOutputFileExt => "bytes";
 
+    public BinaryDataTarget()
+    {
+        BinaryDataVisitor.ExportTags = EnvManager.Current.GetBoolOptionOrDefault("bin", "exportTags", true, false);
+    }
+
     private void WriteList(DefTable table, List<Record> datas, ByteBuf x)
     {
         x.WriteSize(datas.Count);

@@ -64,6 +64,8 @@ public class ExcelRowColumnDataSource : DataLoaderBase
                         continue;
                     }
                     var data = (DBean)type.Apply(SheetDataCreator.Ins, sheet, row);
+                    data.Tags = DataUtil.ParseTags(tagStr);
+
                     datas.Add(new Record(data, sheet.UrlWithParams, DataUtil.ParseTags(tagStr)));
                 }
             }

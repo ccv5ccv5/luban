@@ -9,6 +9,7 @@ namespace Luban.DataExporter.Builtin.Binary;
 public class BinaryDataVisitor : IDataActionVisitor<ByteBuf>
 {
     public static BinaryDataVisitor Ins { get; } = new();
+    public static bool ExportTags { get; set; } = true;
 
     public void Accept(DBool type, ByteBuf x)
     {
@@ -66,6 +67,19 @@ public class BinaryDataVisitor : IDataActionVisitor<ByteBuf>
         if (bean.IsAbstractType)
         {
             x.WriteInt(type.ImplType.Id);
+        }
+
+        if (ExportTags)
+        {
+            if (type.Tags != null && type.Tags.Count > 0)
+            {
+                x.WriteBool(true);
+                x.WriteString(string.Join(",", type.Tags));
+            }
+            else
+            {
+                x.WriteBool(false);
+            }
         }
 
         var defFields = type.ImplType.HierarchyFields;

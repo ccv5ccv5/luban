@@ -11,6 +11,7 @@ namespace Luban.DataExporter.Builtin.Json;
 public class JsonDataVisitor : IDataActionVisitor<Utf8JsonWriter>
 {
     public static JsonDataVisitor Ins { get; } = new();
+    public static bool ExportTags { get; set; } = true;
 
     public void Accept(DBool type, Utf8JsonWriter x)
     {
@@ -72,6 +73,12 @@ public class JsonDataVisitor : IDataActionVisitor<Utf8JsonWriter>
             x.WriteStringValue(DataUtil.GetImplTypeName(type));
         }
 
+        if (ExportTags && type.Tags != null && type.Tags.Count > 0)
+        {
+            x.WritePropertyName(FieldNames.TagKey);
+            x.WriteStringValue(string.Join(",", type.Tags));
+        }
+
         var defFields = type.ImplType.HierarchyFields;
         int index = 0;
         foreach (var d in type.Fields)
@@ -121,6 +128,7 @@ public class JsonDataVisitor : IDataActionVisitor<Utf8JsonWriter>
     public virtual void Accept(DMap type, Utf8JsonWriter x)
     {
         x.WriteStartArray();
+
         foreach (var d in type.DataMap)
         {
             x.WriteStartArray();

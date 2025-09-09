@@ -15,6 +15,10 @@ public class JsonDataTarget : DataTargetBase
 
     protected virtual JsonDataVisitor ImplJsonDataVisitor => JsonDataVisitor.Ins;
 
+    public JsonDataTarget()
+    {
+        JsonDataVisitor.ExportTags =  EnvManager.Current.GetBoolOptionOrDefault("json", "exportTags", true, false);
+    }
 
     public void WriteAsArray(List<Record> datas, Utf8JsonWriter x, JsonDataVisitor jsonDataVisitor)
     {

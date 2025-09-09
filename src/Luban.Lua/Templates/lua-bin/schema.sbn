@@ -103,6 +103,9 @@ local function InitTypes(methods)
     {{~ for bean in __beans ~}}
         do
         ---@class {{bean.full_name}} {{if bean.parent_def_type}}:{{bean.parent}} {{end}} {{-if bean.comment != ''}} @{{escape_comment bean.comment}}{{end}}
+        {{~if __export_tags~}}
+         ---@field public __tag__ string @标签
+        {{~end~}}
         {{~ for field in bean.export_fields~}}
          ---@field public {{field.name}} {{comment_type field.ctype}} {{-if field.comment != ''}} @{{escape_comment field.comment}}{{end}}
         {{~end~}}
@@ -134,6 +137,10 @@ local function InitTypes(methods)
 {{~else~}}
         class._deserialize = function(bs)
             local o = {
+        {{~if __export_tags~}}
+                -- 读取标签
+                __tag__ = readBool(bs) and readString(bs) or nil,
+        {{~end~}}
         {{~ for field in bean.hierarchy_export_fields ~}}
             {{~if !(need_marshal_bool_prefix field.ctype)~}}
             {{field.name}} = {{deserialize 'bs' field.ctype}},

@@ -11,6 +11,8 @@ public class ToLuaLiteralVisitor : ToLiteralVisitorBase
 {
     public static ToLuaLiteralVisitor Ins { get; } = new();
 
+    public static bool ExportTags { get; set; } = true;
+
     public override string Accept(DString type)
     {
         return DataUtil.EscapeLuaStringWithQuote(type.Value);
@@ -26,6 +28,11 @@ public class ToLuaLiteralVisitor : ToLiteralVisitorBase
         else
         {
             x.Append('{');
+        }
+
+        if (ExportTags && type.Tags != null && type.Tags.Count > 0)
+        {
+            x.Append($"{FieldNames.TagKey}='{string.Join(",", type.Tags)}',");
         }
 
         int index = 0;

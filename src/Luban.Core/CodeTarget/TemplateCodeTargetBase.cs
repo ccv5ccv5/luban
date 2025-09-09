@@ -103,6 +103,7 @@ public abstract class TemplateCodeTargetBase : CodeTargetBase
             {"__hierarchy_export_fields", bean.HierarchyExportFields},
             {"__parent_def_type", bean.ParentDefType},
             { "__code_style", CodeStyle},
+            { "__export_tags", EnvManager.Current.GetBoolOptionOrDefault("bin", "exportTags", true, false)},
         };
         tplCtx.PushGlobal(extraEnvs);
         writer.Write(template.Render(tplCtx));
